@@ -1,0 +1,42 @@
+package summit.summitexpenseprj;
+
+query "get reco"()
+    greeting : CustomerProfileDO()
+end
+
+
+rule startprocessrule
+when summit.summitexpenseprj.CustomerProfileDO( )
+then
+System.out.println("hi from the rule..enhance later to maybe call a process");
+end
+
+
+
+//from row number: 1
+rule "R1servicerecos"
+	dialect "mvel"
+	when
+		cdo : CustomerProfileDO( rating == "gold" , recentinterestin == "homeloan" , trigger == "checkorder" , currentpromotion in ( "homeloan", "autoloan" ) )
+	then
+		cdo.setServicereco( "homeloan" );
+end
+
+//from row number: 2
+rule "R2servicerecos"
+	dialect "mvel"
+	when
+		cdo : CustomerProfileDO( rating == "silver" , recentinterestin == "homeloan" , trigger == "checkorder" , currentpromotion in ( "homeloan", "autoloan" ) )
+	then
+		cdo.setServicereco( "autoloan" );
+end
+
+//from row number: 3
+rule "R3servicerecos"
+	dialect "mvel"
+	when
+		cdo : CustomerProfileDO( rating == "bronze" , recentinterestin == "homeloan" , trigger == "accountopen" , currentpromotion in ( "homeloan", "portfolio" ) )
+	then
+		cdo.setServicereco( "portfolio management" );
+end
+
